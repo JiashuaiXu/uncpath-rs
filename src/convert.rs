@@ -4,7 +4,8 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 
 // Compile regex patterns once at startup
-static WINDOWS_UNC_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^\\\\([^\\]+)\\([^\\]+)(.*)$").unwrap());
+static WINDOWS_UNC_RE: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"^\\\\([^\\]+)\\([^\\]+)(.*)$").unwrap());
 static SMB_URL_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^smb://([^/]+)/([^/]+)(.*)$").unwrap());
 static UNIX_STYLE_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^//([^/]+)/([^/]+)(.*)$").unwrap());
 
