@@ -1,6 +1,12 @@
 use crate::errors::{Result, UncPathError};
 use crate::mapping::MappingTable;
+use once_cell::sync::Lazy;
 use regex::Regex;
+
+// Compile regex patterns once at startup
+static WINDOWS_UNC_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^\\\\([^\\]+)\\([^\\]+)(.*)$").unwrap());
+static SMB_URL_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^smb://([^/]+)/([^/]+)(.*)$").unwrap());
+static UNIX_STYLE_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^//([^/]+)/([^/]+)(.*)$").unwrap());
 
 /// Parsed UNC path components
 #[derive(Debug, PartialEq)]
@@ -46,9 +52,7 @@ pub fn parse_unc_path(input: &str) -> Result<UncPath> {
 
 /// Parse Windows UNC path: \\host\share\path
 fn parse_windows_unc(input: &str) -> Result<UncPath> {
-    let re = Regex::new(r"^\\\\([^\\]+)\\([^\\]+)(.*)$").unwrap();
-
-    if let Some(caps) = re.captures(input) {
+    if let Some(caps) = WINDOWS_UNC_RE.captures(input) {
         let host = caps.get(1).unwrap().as_str().to_string();
         let share = caps.get(2).unwrap().as_str().to_string();
         let path = caps
@@ -68,9 +72,7 @@ fn parse_windows_unc(input: &str) -> Result<UncPath> {
 
 /// Parse SMB URL: smb://host/share/path
 fn parse_smb_url(input: &str) -> Result<UncPath> {
-    let re = Regex::new(r"^smb://([^/]+)/([^/]+)(.*)$").unwrap();
-
-    if let Some(caps) = re.captures(input) {
+    if let Some(caps) = SMB_URL_RE.captures(input) {
         let host = caps.get(1).unwrap().as_str().to_string();
         let share = caps.get(2).unwrap().as_str().to_string();
         let path = caps.get(3).map(|m| m.as_str()).unwrap_or("").to_string();
@@ -86,9 +88,7 @@ fn parse_smb_url(input: &str) -> Result<UncPath> {
 
 /// Parse Unix-style UNC: //host/share/path
 fn parse_unix_style(input: &str) -> Result<UncPath> {
-    let re = Regex::new(r"^//([^/]+)/([^/]+)(.*)$").unwrap();
-
-    if let Some(caps) = re.captures(input) {
+    if let Some(caps) = UNIX_STYLE_RE.captures(input) {
         let host = caps.get(1).unwrap().as_str().to_string();
         let share = caps.get(2).unwrap().as_str().to_string();
         let path = caps.get(3).map(|m| m.as_str()).unwrap_or("").to_string();

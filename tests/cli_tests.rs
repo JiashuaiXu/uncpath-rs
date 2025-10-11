@@ -74,8 +74,9 @@ fn test_multiple_custom_mappings() {
 #[test]
 fn test_list_mappings() {
     let mut cmd = Command::cargo_bin("uncpath").unwrap();
+    // Note: PATH argument is required but ignored when using --list
     cmd.arg("--list")
-        .arg("//dummy/path")
+        .arg("ignored")
         .assert()
         .success()
         .stdout(predicate::str::contains("Configured mappings:"))
