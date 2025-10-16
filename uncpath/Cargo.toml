@@ -1,0 +1,16 @@
+[package]
+name = "uncpath"
+version = "0.1.0"
+edition = "2021"
+description = "Minimal UNC path resolver with TUI for Linux/Samba workflows"
+license = "MIT"
+repository = "https://github.com/JiashuaiXu/uncpath-rs"
+
+[[bin]]
+name = "unc"
+path = "src/main.rs"
+
+[dependencies]
+ratatui = "0.26"
+crossterm = { version = "0.27", features = ["events"] }
+anyhow = "1.0"
