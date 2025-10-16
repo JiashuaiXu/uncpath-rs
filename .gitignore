@@ -1,1 +1,37 @@
+# ===============================
+# 🦀 Rust build artifacts
+# ===============================
+/target/
+
+# Cargo lock file for libraries (optional)
+# Cargo.lock
+
+# ===============================
+# 🧠 Nix + direnv environment
+# ===============================
 .direnv/
+.envrc.local
+result
+result-*
+.nix-channels
+.nix-defexpr
+.cache/
+*.drv
+
+# ===============================
+# 🧰 IDE / Editor
+# ===============================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ===============================
+# 🧪 Temporary files
+# ===============================
+*.log
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
+
